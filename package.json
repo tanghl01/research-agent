@@ -1,0 +1,35 @@
+{
+  "name": "operator",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "description": "Operator Mastra-powered vertical agent platform MVP.",
+  "packageManager": "pnpm@11.5.2",
+  "scripts": {
+    "build": "pnpm -r build",
+    "format": "biome format --write apps/web/app apps/web/components apps/web/lib apps/web/e2e apps/web/scripts apps/web/styles apps/web/instrumentation.ts apps/web/next.config.mjs apps/web/playwright.config.ts apps/mastra/src packages/*/src",
+    "format:check": "biome format apps/web/app apps/web/components apps/web/lib apps/web/e2e apps/web/scripts apps/web/styles apps/web/instrumentation.ts apps/web/next.config.mjs apps/web/playwright.config.ts apps/mastra/src packages/*/src",
+    "lint": "biome lint apps/web/app apps/web/components apps/web/lib apps/web/e2e apps/web/scripts apps/web/styles apps/web/instrumentation.ts apps/web/next.config.mjs apps/web/playwright.config.ts apps/mastra/src packages/*/src",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "operator": "pnpm --filter @operator/mastra-app operator",
+    "chat": "pnpm --filter @operator/mastra-app operator --chat",
+    "db:generate": "pnpm --filter @operator/db generate",
+    "db:migrate": "pnpm --filter @operator/db migrate",
+    "knowledge:export": "pnpm --filter @operator/knowledge-ingestion exec tsx src/transfer-cli.ts export",
+    "knowledge:import": "pnpm --filter @operator/knowledge-ingestion exec tsx src/transfer-cli.ts import",
+    "knowledge:cleanup-html": "pnpm --filter @operator/knowledge-ingestion exec tsx src/transfer-cli.ts cleanup-html",
+    "workflow:skill2workflow": "pnpm --filter @operator/mastra-app operator --workflow system.skill2workflow",
+    "capabilities:sync": "tsx packages/core/src/capabilities-cli.ts sync",
+    "capabilities:list": "tsx packages/core/src/capabilities-cli.ts list",
+    "capabilities:inspect": "tsx packages/core/src/capabilities-cli.ts inspect",
+    "capabilities:import": "tsx packages/core/src/capabilities-cli.ts import"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.1",
+    "@types/node": "^24.0.0",
+    "tsx": "^4.20.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.2.0"
+  }
+}

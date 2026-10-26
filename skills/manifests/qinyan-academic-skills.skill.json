@@ -1,0 +1,224 @@
+{
+  "$schema": "https://operator.local/schemas/skill-manifest.v1.json",
+  "id": "qinyan-academic-skills",
+  "kind": "agent_skill_collection",
+  "display_name": "qinyan-academic-skills",
+  "description": "Qinyan academic research skills collection for paper search, paper analysis, citation formatting, topic analysis, academic writing, scientific examples, and research workflows.",
+  "source": {
+    "type": "git",
+    "repo": "https://github.com/LeonChaoX/qinyan-academic-skills.git",
+    "ref": "main",
+    "commit": "1e52e246b1dfd345f7b15f6a8818d6e669a534a7"
+  },
+  "cache": {
+    "development_root": "skills/vendored/qinyan-academic-skills",
+    "production_root_env": "OPERATOR_SKILL_CACHE_ROOT",
+    "production_path_template": "{root}/{id}/{commit}"
+  },
+  "env": {
+    "root_override": "OPERATOR_QINYAN_ACADEMIC_SKILLS_ROOT"
+  },
+  "entrypoints": {
+    "readme": "README.md",
+    "skills": "skills",
+    "qinyan_paper_search": "skills/沁言学术skills/qinyan-paper-search/SKILL.md",
+    "qinyan_paper_analysis": "skills/沁言学术skills/qinyan-paper-analysis/SKILL.md",
+    "qinyan_citation": "skills/沁言学术skills/qinyan-citation/SKILL.md",
+    "qinyan_topic_analysis": "skills/沁言学术skills/qinyan-topic-analysis/SKILL.md"
+  },
+  "required_paths": [
+    "README.md",
+    "skills/沁言学术skills/qinyan-paper-search/SKILL.md",
+    "skills/沁言学术skills/qinyan-paper-search/scripts/search.sh",
+    "skills/沁言学术skills/qinyan-paper-analysis/SKILL.md",
+    "skills/沁言学术skills/qinyan-paper-analysis/scripts/analyze.sh",
+    "skills/沁言学术skills/qinyan-citation/SKILL.md",
+    "skills/沁言学术skills/qinyan-topic-analysis/SKILL.md",
+    "skills/02-科学写作与学术交流/venue-templates/assets/examples/neurips_introduction_example.md",
+    "skills/03-学术演示与可视化/markdown-mermaid-writing/assets/examples/example-research-report.md",
+    "skills/09-机器学习与人工智能/timesfm-forecasting/examples/covariates-forecasting/demo_covariates.py"
+  ],
+  "install": {
+    "required_env": [
+      "QINYAN_API_KEY"
+    ]
+  },
+  "configuration": {
+    "requiredEnv": [
+      "QINYAN_API_KEY"
+    ],
+    "providers": [
+      {
+        "id": "qinyan-openapi",
+        "interface": "qinyan-openapi",
+        "required": true,
+        "env": {
+          "apiKey": "QINYAN_API_KEY"
+        },
+        "compatibleProviders": ["qinyan"]
+      }
+    ]
+  },
+  "subskills": {
+    "qinyan-paper-search": {
+      "display_name": "沁言论文检索",
+      "description": "Search Google Scholar, Wanfang, PubMed, and ArXiv through Qinyan OpenAPI.",
+      "root_subpath": "skills/沁言学术skills/qinyan-paper-search",
+      "entrypoints": {
+        "skill": "SKILL.md",
+        "search": "scripts/search.sh"
+      },
+      "required_paths": ["SKILL.md", "scripts/search.sh"],
+      "runtime": {
+        "type": "external",
+        "commands": {
+          "search": "bash {skill_root}/scripts/search.sh"
+        },
+        "notes": [
+          "Requires QINYAN_API_KEY. If the key is unavailable, report that live Qinyan OpenAPI search cannot run and use public web search only when the task permits it."
+        ]
+      },
+      "execution": {
+        "evidence_entrypoint": "skill",
+        "required_entrypoints": ["skill", "search"],
+        "required_commands": ["search"],
+        "notes": ["Do not fabricate citation metadata. Preserve missing fields explicitly."]
+      }
+    },
+    "qinyan-paper-analysis": {
+      "display_name": "沁言论文分析",
+      "description": "Analyze one paper through Qinyan OpenAPI from title, authors, abstract, DOI, source URL, or PDF URL.",
+      "root_subpath": "skills/沁言学术skills/qinyan-paper-analysis",
+      "entrypoints": {
+        "skill": "SKILL.md",
+        "analyze": "scripts/analyze.sh"
+      },
+      "required_paths": ["SKILL.md", "scripts/analyze.sh"],
+      "runtime": {
+        "type": "external",
+        "commands": {
+          "analyze": "bash {skill_root}/scripts/analyze.sh"
+        },
+        "notes": ["Requires QINYAN_API_KEY. Prefer pdf_url when available and state limitations if only an abstract is available."]
+      },
+      "execution": {
+        "evidence_entrypoint": "skill",
+        "required_entrypoints": ["skill", "analyze"],
+        "required_commands": ["analyze"]
+      }
+    },
+    "qinyan-citation": {
+      "display_name": "沁言引文格式",
+      "description": "Search paper metadata through Qinyan OpenAPI and format references in GB/T 7714, IEEE, APA, MLA, Chicago, Harvard, and related styles.",
+      "root_subpath": "skills/沁言学术skills/qinyan-citation",
+      "entrypoints": {
+        "skill": "SKILL.md",
+        "search": "scripts/search.sh"
+      },
+      "required_paths": ["SKILL.md", "scripts/search.sh"],
+      "runtime": {
+        "type": "external",
+        "commands": {
+          "search": "bash {skill_root}/scripts/search.sh"
+        },
+        "notes": ["Requires QINYAN_API_KEY. Missing metadata must stay marked as missing rather than guessed."]
+      },
+      "execution": {
+        "evidence_entrypoint": "skill",
+        "required_entrypoints": ["skill", "search"],
+        "required_commands": ["search"],
+        "notes": ["Do not invent volume, issue, pages, DOI, publisher, or venue fields."]
+      }
+    },
+    "qinyan-topic-analysis": {
+      "display_name": "沁言选题分析",
+      "description": "Generate research topic suggestions from literature search evidence through Qinyan OpenAPI workflows.",
+      "root_subpath": "skills/沁言学术skills/qinyan-topic-analysis",
+      "entrypoints": {
+        "skill": "SKILL.md",
+        "search": "scripts/search.sh"
+      },
+      "required_paths": ["SKILL.md", "scripts/search.sh"],
+      "runtime": {
+        "type": "external",
+        "commands": {
+          "search": "bash {skill_root}/scripts/search.sh"
+        },
+        "notes": ["Requires QINYAN_API_KEY. Topic recommendations must cite actual search results and disclose search coverage."]
+      }
+    },
+    "qinyan-paper-polish": {
+      "display_name": "沁言论文润色",
+      "description": "Academic writing polish workflow for Chinese and English paper text while preserving claims and evidence boundaries.",
+      "root_subpath": "skills/沁言学术skills/qinyan-paper-polish",
+      "entrypoints": {
+        "skill": "SKILL.md"
+      },
+      "required_paths": ["SKILL.md"],
+      "execution": {
+        "evidence_entrypoint": "skill",
+        "notes": [
+          "Polish language only. Do not add claims, data, methods, or conclusions that are not present in the user's supplied text."
+        ]
+      }
+    },
+    "timesfm-forecasting": {
+      "display_name": "TimesFM forecasting examples",
+      "description": "Forecasting and anomaly-detection examples with reproducible scripts, CSV/JSON outputs, and visualization patterns.",
+      "root_subpath": "skills/09-机器学习与人工智能/timesfm-forecasting",
+      "entrypoints": {
+        "skill": "SKILL.md",
+        "examples": "examples",
+        "covariates_demo": "examples/covariates-forecasting/demo_covariates.py"
+      },
+      "required_paths": [
+        "SKILL.md",
+        "examples/covariates-forecasting/demo_covariates.py",
+        "examples/global-temperature/temperature_anomaly.csv"
+      ],
+      "execution": {
+        "evidence_entrypoint": "skill",
+        "notes": [
+          "Some examples require timesfm model packages and model downloads. Prefer scripts that can run locally without private API keys when doing smoke tests."
+        ]
+      }
+    },
+    "paper-slide-deck": {
+      "display_name": "Paper slide deck",
+      "description": "Generate academic slide deck images and merge them into PPTX/PDF when required model APIs are available.",
+      "root_subpath": "skills/03-学术演示与可视化/paper-slide-deck",
+      "entrypoints": {
+        "skill": "SKILL.md",
+        "scripts": "scripts",
+        "references": "references"
+      },
+      "required_paths": ["SKILL.md", "scripts/generate-slides.py", "scripts/merge-to-pptx.ts", "scripts/merge-to-pdf.ts"],
+      "execution": {
+        "evidence_entrypoint": "skill",
+        "notes": [
+          "Generation scripts may require GEMINI_API_KEY and external model access. State missing credentials rather than silently producing placeholder slides."
+        ]
+      }
+    },
+    "nsfc-proposal": {
+      "display_name": "NSFC proposal",
+      "description": "National Natural Science Foundation of China proposal drafting guidance with literature-search and compliance checklists.",
+      "root_subpath": "skills/04-研究方法与科学思维/nsfc-proposal",
+      "entrypoints": {
+        "skill": "SKILL.md",
+        "spec": "references/NSFC_WRITING_SPEC.md",
+        "checklist": "references/QUALITY_CHECKLIST.md"
+      },
+      "required_paths": ["SKILL.md", "references/NSFC_WRITING_SPEC.md", "references/QUALITY_CHECKLIST.md"],
+      "execution": {
+        "evidence_entrypoint": "skill",
+        "notes": [
+          "Applicant-owned scientific content is required for final submissions. Mark assumptions and fields that require applicant confirmation."
+        ]
+      }
+    }
+  },
+  "license": {
+    "notice": "Follow upstream qinyan-academic-skills MIT license and individual nested skill dependency/API requirements."
+  }
+}

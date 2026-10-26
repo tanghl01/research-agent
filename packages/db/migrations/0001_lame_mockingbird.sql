@@ -1,0 +1,3 @@
+CREATE UNIQUE INDEX "drive_spaces_owner_user_unique" ON "drive_spaces" USING btree ("owner_user_id") WHERE "drive_spaces"."owner_type" = 'user' and "drive_spaces"."owner_user_id" is not null;--> statement-breakpoint
+CREATE UNIQUE INDEX "drive_spaces_owner_org_unique" ON "drive_spaces" USING btree ("owner_org_id") WHERE "drive_spaces"."owner_type" = 'organization' and "drive_spaces"."owner_org_id" is not null;--> statement-breakpoint
+ALTER TABLE "user_sessions" ADD CONSTRAINT "user_sessions_hash_unique" UNIQUE("session_hash");

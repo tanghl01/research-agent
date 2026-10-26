@@ -1,0 +1,407 @@
+{
+  "generatedAt": "2026-06-14T03:21:53.651Z",
+  "github": [
+    {
+      "repo": "openai/codex",
+      "ok": true,
+      "fullName": "openai/codex",
+      "description": "Lightweight coding agent that runs in your terminal",
+      "stars": 90882,
+      "license": "Apache-2.0",
+      "updatedAt": "2026-06-14T03:21:05Z",
+      "url": "https://github.com/openai/codex"
+    },
+    {
+      "repo": "google-gemini/gemini-cli",
+      "ok": true,
+      "fullName": "google-gemini/gemini-cli",
+      "description": "An open-source AI agent that brings the power of Gemini directly into your terminal.",
+      "stars": 105251,
+      "license": "Apache-2.0",
+      "updatedAt": "2026-06-14T01:00:12Z",
+      "url": "https://github.com/google-gemini/gemini-cli"
+    },
+    {
+      "repo": "cline/cline",
+      "ok": true,
+      "fullName": "cline/cline",
+      "description": "Autonomous coding agent as an SDK, IDE extension, or CLI assistant.",
+      "stars": 63229,
+      "license": "Apache-2.0",
+      "updatedAt": "2026-06-14T03:21:08Z",
+      "url": "https://github.com/cline/cline"
+    },
+    {
+      "repo": "opencode-ai/opencode",
+      "ok": true,
+      "fullName": "opencode-ai/opencode",
+      "description": "A powerful AI coding agent. Built for the terminal.",
+      "stars": 12941,
+      "license": "MIT",
+      "updatedAt": "2026-06-13T23:52:58Z",
+      "url": "https://github.com/opencode-ai/opencode"
+    },
+    {
+      "repo": "OpenHands/OpenHands",
+      "ok": true,
+      "fullName": "OpenHands/OpenHands",
+      "description": "🙌 OpenHands: AI-Driven Development",
+      "stars": 76914,
+      "license": "NOASSERTION",
+      "updatedAt": "2026-06-14T03:13:41Z",
+      "url": "https://github.com/OpenHands/OpenHands"
+    },
+    {
+      "repo": "Aider-AI/aider",
+      "ok": true,
+      "fullName": "Aider-AI/aider",
+      "description": "aider is AI pair programming in your terminal",
+      "stars": 46164,
+      "license": "Apache-2.0",
+      "updatedAt": "2026-06-14T03:19:37Z",
+      "url": "https://github.com/Aider-AI/aider"
+    },
+    {
+      "repo": "SWE-agent/mini-swe-agent",
+      "ok": true,
+      "fullName": "SWE-agent/mini-swe-agent",
+      "description": "The 100 line AI agent that solves GitHub issues or helps you in your command line. Radically simple, no huge configs, no giant monorepo—but scores >74% on SWE-bench verified!",
+      "stars": 5136,
+      "license": "MIT",
+      "updatedAt": "2026-06-14T03:19:09Z",
+      "url": "https://github.com/SWE-agent/mini-swe-agent"
+    },
+    {
+      "repo": "langchain-ai/deepagents",
+      "ok": true,
+      "fullName": "langchain-ai/deepagents",
+      "description": "The batteries-included agent harness.",
+      "stars": 24582,
+      "license": "MIT",
+      "updatedAt": "2026-06-14T03:00:03Z",
+      "url": "https://github.com/langchain-ai/deepagents"
+    },
+    {
+      "repo": "tavily-ai/tavily-mcp",
+      "ok": true,
+      "fullName": "tavily-ai/tavily-mcp",
+      "description": "Production ready MCP server with real-time search, extract, map & crawl.",
+      "stars": 2100,
+      "license": "MIT",
+      "updatedAt": "2026-06-13T14:12:46Z",
+      "url": "https://github.com/tavily-ai/tavily-mcp"
+    },
+    {
+      "repo": "exa-labs/exa-mcp-server",
+      "ok": true,
+      "fullName": "exa-labs/exa-mcp-server",
+      "description": "Exa MCP for web search and web crawling!",
+      "stars": 4573,
+      "license": "MIT",
+      "updatedAt": "2026-06-14T02:59:09Z",
+      "url": "https://github.com/exa-labs/exa-mcp-server"
+    },
+    {
+      "repo": "brave/brave-search-mcp-server",
+      "ok": true,
+      "fullName": "brave/brave-search-mcp-server",
+      "description": null,
+      "stars": 1179,
+      "license": "MIT",
+      "updatedAt": "2026-06-13T21:11:16Z",
+      "url": "https://github.com/brave/brave-search-mcp-server"
+    },
+    {
+      "repo": "firecrawl/firecrawl-mcp-server",
+      "ok": true,
+      "fullName": "firecrawl/firecrawl-mcp-server",
+      "description": "🔥 Official Firecrawl MCP Server - Adds powerful web scraping and search to Cursor, Claude and any other LLM clients.",
+      "stars": 6562,
+      "license": "MIT",
+      "updatedAt": "2026-06-13T22:59:11Z",
+      "url": "https://github.com/firecrawl/firecrawl-mcp-server"
+    },
+    {
+      "repo": "unclecode/crawl4ai",
+      "ok": true,
+      "fullName": "unclecode/crawl4ai",
+      "description": "🚀🤖 Crawl4AI: Open-source LLM Friendly Web Crawler & Scraper. Don't be shy, join here: https://discord.gg/jP8KfhDhyN",
+      "stars": 68428,
+      "license": "Apache-2.0",
+      "updatedAt": "2026-06-14T03:17:56Z",
+      "url": "https://github.com/unclecode/crawl4ai"
+    },
+    {
+      "repo": "microsoft/playwright-mcp",
+      "ok": true,
+      "fullName": "microsoft/playwright-mcp",
+      "description": "Playwright MCP server",
+      "stars": 33876,
+      "license": "Apache-2.0",
+      "updatedAt": "2026-06-14T02:07:42Z",
+      "url": "https://github.com/microsoft/playwright-mcp"
+    },
+    {
+      "repo": "browser-use/browser-use",
+      "ok": true,
+      "fullName": "browser-use/browser-use",
+      "description": "🌐 Make websites accessible for AI agents. Automate tasks online with ease.",
+      "stars": 98704,
+      "license": "MIT",
+      "updatedAt": "2026-06-14T03:12:42Z",
+      "url": "https://github.com/browser-use/browser-use"
+    },
+    {
+      "repo": "browserbase/stagehand",
+      "ok": true,
+      "fullName": "browserbase/stagehand",
+      "description": "The SDK For Browser Agents",
+      "stars": 23100,
+      "license": "MIT",
+      "updatedAt": "2026-06-13T23:01:43Z",
+      "url": "https://github.com/browserbase/stagehand"
+    },
+    {
+      "repo": "browserbase/mcp-server-browserbase",
+      "ok": true,
+      "fullName": "browserbase/mcp-server-browserbase",
+      "description": "Allow LLMs to control a browser with Browserbase and Stagehand",
+      "stars": 3370,
+      "license": "Apache-2.0",
+      "updatedAt": "2026-06-13T11:32:14Z",
+      "url": "https://github.com/browserbase/mcp-server-browserbase"
+    },
+    {
+      "repo": "assafelovic/gpt-researcher",
+      "ok": true,
+      "fullName": "assafelovic/gpt-researcher",
+      "description": "An autonomous agent that conducts deep research on any data using any LLM providers",
+      "stars": 27685,
+      "license": "Apache-2.0",
+      "updatedAt": "2026-06-14T02:56:40Z",
+      "url": "https://github.com/assafelovic/gpt-researcher"
+    },
+    {
+      "repo": "langchain-ai/open_deep_research",
+      "ok": true,
+      "fullName": "langchain-ai/open_deep_research",
+      "description": null,
+      "stars": 11696,
+      "license": "MIT",
+      "updatedAt": "2026-06-14T01:01:21Z",
+      "url": "https://github.com/langchain-ai/open_deep_research"
+    },
+    {
+      "repo": "harbor-framework/terminal-bench",
+      "ok": true,
+      "fullName": "harbor-framework/terminal-bench",
+      "description": "A benchmark for LLMs on complicated tasks in the terminal",
+      "stars": 2353,
+      "license": "Apache-2.0",
+      "updatedAt": "2026-06-13T22:06:57Z",
+      "url": "https://github.com/harbor-framework/terminal-bench"
+    }
+  ],
+  "npm": [
+    {
+      "package": "@google/gemini-cli",
+      "ok": true,
+      "version": "0.46.0",
+      "description": "Gemini CLI",
+      "license": "Apache-2.0",
+      "homepage": "https://github.com/google-gemini/gemini-cli#readme",
+      "repository": "git+https://github.com/google-gemini/gemini-cli.git"
+    },
+    {
+      "package": "cline",
+      "ok": true,
+      "version": "3.0.24",
+      "description": "Autonomous coding agent CLI - capable of creating/editing files, running commands, using the browser, and more",
+      "license": "Apache-2.0",
+      "homepage": "https://cline.bot",
+      "repository": "git+https://github.com/cline/cline.git"
+    },
+    {
+      "package": "opencode-ai",
+      "ok": true,
+      "version": "1.17.6",
+      "license": "MIT",
+      "repository": null
+    },
+    {
+      "package": "opencode",
+      "ok": false,
+      "command": {
+        "ok": false,
+        "exitCode": 1,
+        "signal": null,
+        "timedOut": false,
+        "durationMs": 757,
+        "stdoutTail": "{\n  \"error\": {\n    \"code\": \"E404\",\n    \"summary\": \"Not Found - GET https://registry.npmjs.org/opencode - Not found\",\n    \"detail\": \"'opencode@*' is not in this registry.\\n\\nNote that you can also install from a\\ntarball, folder, http url, or git url.\"\n  }\n}\n",
+        "stderrTail": "npm error code E404\nnpm error 404 Not Found - GET https://registry.npmjs.org/opencode - Not found\nnpm error 404\nnpm error 404  'opencode@*' is not in this registry.\nnpm error 404\nnpm error 404 Note that you can also install from a\nnpm error 404 tarball, folder, http url, or git url.\nnpm error A complete log of this run can be found in: /home/biostar/.npm/_logs/2026-06-14T03_21_51_326Z-debug-0.log\n"
+      }
+    },
+    {
+      "package": "@playwright/mcp",
+      "ok": true,
+      "version": "0.0.76",
+      "description": "Playwright Tools for MCP",
+      "license": "Apache-2.0",
+      "homepage": "https://playwright.dev",
+      "repository": "git+https://github.com/microsoft/playwright-mcp.git"
+    },
+    {
+      "package": "tavily-mcp",
+      "ok": true,
+      "version": "0.2.20",
+      "description": "MCP server for advanced web search using Tavily",
+      "license": "MIT",
+      "homepage": "https://github.com/tavily-ai/tavily-mcp#readme",
+      "repository": "git+https://github.com/tavily-ai/tavily-mcp.git"
+    },
+    {
+      "package": "exa-mcp-server",
+      "ok": true,
+      "version": "3.2.1",
+      "description": "A Model Context Protocol server with Exa for web search and web crawling. Provides real-time web searches with configurable tool selection, allowing users to enable or disable specific search capabilities. Supports customizable result counts, live crawlin",
+      "homepage": "https://github.com/exa-labs/exa-mcp-server#readme",
+      "repository": "git+https://github.com/exa-labs/exa-mcp-server.git"
+    },
+    {
+      "package": "@brave/brave-search-mcp-server",
+      "ok": true,
+      "version": "2.0.83",
+      "description": "Brave Search MCP Server: web results, images, videos, rich results, AI summaries, and more.",
+      "license": "MIT",
+      "homepage": "https://github.com/brave/brave-search-mcp-server",
+      "repository": "git+https://github.com/brave/brave-search-mcp-server.git"
+    },
+    {
+      "package": "firecrawl-mcp",
+      "ok": true,
+      "version": "3.20.4",
+      "description": "MCP server for Firecrawl — search, scrape, and interact with the web. Supports both cloud and self-hosted instances. Features include web search, scraping, page interaction, batch processing, and LLM-powered content analysis.",
+      "license": "MIT",
+      "homepage": "https://github.com/firecrawl/firecrawl-mcp-server#readme",
+      "repository": "git+https://github.com/firecrawl/firecrawl-mcp-server.git"
+    },
+    {
+      "package": "@browserbasehq/mcp",
+      "ok": true,
+      "version": "3.0.0",
+      "description": "MCP server for AI web browser automation using Browserbase and Stagehand",
+      "license": "Apache-2.0",
+      "homepage": "https://www.browserbase.com",
+      "repository": "git+https://github.com/browserbase/mcp-server-browserbase.git"
+    },
+    {
+      "package": "@browserbasehq/stagehand",
+      "ok": true,
+      "version": "3.5.0",
+      "description": "An AI web browsing framework focused on simplicity and extensibility.",
+      "license": "MIT",
+      "homepage": "https://stagehand.dev",
+      "repository": "git+https://github.com/browserbase/stagehand.git"
+    }
+  ],
+  "pypi": [
+    {
+      "package": "aider-chat",
+      "ok": true,
+      "version": "0.86.2",
+      "summary": "Aider is AI pair programming in your terminal",
+      "license": null,
+      "homePage": null,
+      "projectUrls": {
+        "Homepage": "https://github.com/Aider-AI/aider"
+      }
+    },
+    {
+      "package": "browser-use",
+      "ok": true,
+      "version": "0.13.1",
+      "summary": "Make websites accessible for AI agents",
+      "license": null,
+      "homePage": null,
+      "projectUrls": {
+        "Documentation": "https://docs.browser-use.com",
+        "Homepage": "https://browser-use.com",
+        "Privacy Policy": "https://browser-use.com/privacy/",
+        "Repository": "https://github.com/browser-use/browser-use",
+        "Telemetry": "https://docs.browser-use.com/development/monitoring/telemetry",
+        "Terms of Service": "https://browser-use.com/legal/terms-of-service"
+      }
+    },
+    {
+      "package": "crawl4ai",
+      "ok": true,
+      "version": "0.8.9",
+      "summary": "🚀🤖 Crawl4AI: Open-source LLM Friendly Web Crawler & scraper",
+      "license": "Apache-2.0",
+      "homePage": "https://github.com/unclecode/crawl4ai",
+      "projectUrls": {
+        "Homepage": "https://github.com/unclecode/crawl4ai"
+      }
+    },
+    {
+      "package": "gpt-researcher",
+      "ok": true,
+      "version": "0.15.1",
+      "summary": "GPT Researcher is an autonomous agent designed for comprehensive online research on a variety of tasks.",
+      "license": "MIT",
+      "homePage": "https://github.com/assafelovic/gpt-researcher",
+      "projectUrls": {
+        "Homepage": "https://github.com/assafelovic/gpt-researcher"
+      }
+    },
+    {
+      "package": "terminal-bench",
+      "ok": true,
+      "version": "0.2.18",
+      "summary": "Terminal-bench is a collection of tasks and evaluation harness for evaluating AI agents' ability to complete complex tasks in terminal environments.",
+      "license": null,
+      "homePage": null,
+      "projectUrls": null
+    },
+    {
+      "package": "mini-swe-agent",
+      "ok": true,
+      "version": "2.4.1",
+      "summary": "Mini SWE Agent - A simple AI software engineering agent",
+      "license": "MIT License\n        \n        Copyright (c) 2025 Kilian A. Lieret and Carlos E. Jimenez\n        \n        Permission is hereby granted, free of charge, to any person obtaining a copy\n        of this software and associated documentation files (the \"Software\"), to deal\n        in the Software without restriction, including without limitation the rights\n        to use, copy, modify, merge, publish, distribute, sublicense, and/or sell\n        copies of the Software, and to permit persons to whom the Software is\n        furnished to do so, subject to the following conditions:\n        \n        The above copyright notice and this permission notice shall be included in all\n        copies or substantial portions of the Software.\n        \n        THE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR\n        IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,\n        FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE\n        AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER\n        LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,\n        OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE\n        SOFTWARE.",
+      "homePage": null,
+      "projectUrls": {
+        "Bug Tracker": "https://github.com/SWE-agent/mini-swe-agent/issues",
+        "Documentation": "https://mini-swe-agent.com/latest/",
+        "Repository": "https://github.com/SWE-agent/mini-swe-agent"
+      }
+    },
+    {
+      "package": "deepagents-cli",
+      "ok": true,
+      "version": "0.2.2",
+      "summary": "Deployment tooling for Deep Agents - bundle, run, and ship agents to LangGraph Platform.",
+      "license": "MIT",
+      "homePage": null,
+      "projectUrls": {
+        "Changelog": "https://github.com/langchain-ai/deepagents/blob/main/libs/cli/CHANGELOG.md",
+        "Documentation": "https://reference.langchain.com/python/deepagents/",
+        "Homepage": "https://docs.langchain.com/oss/python/deepagents/overview",
+        "Issues": "https://github.com/langchain-ai/deepagents/issues",
+        "Reddit": "https://www.reddit.com/r/LangChain/",
+        "Repository": "https://github.com/langchain-ai/deepagents",
+        "Slack": "https://www.langchain.com/join-community",
+        "Twitter": "https://x.com/langchain_oss"
+      }
+    },
+    {
+      "package": "mcp-server-fetch",
+      "ok": true,
+      "version": "2026.6.4",
+      "summary": "A Model Context Protocol server providing tools to fetch and convert web content for usage by LLMs",
+      "license": "MIT",
+      "homePage": null,
+      "projectUrls": null
+    }
+  ]
+}

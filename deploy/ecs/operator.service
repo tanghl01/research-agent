@@ -1,0 +1,25 @@
+[Unit]
+Description=Operator Next.js web service
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=operator
+Group=operator
+WorkingDirectory=/opt/operator
+EnvironmentFile=-/etc/operator/operator.env
+Environment=NODE_ENV=production
+Environment=HOME=/var/lib/operator
+Environment=CODEX_HOME=/var/lib/operator/.codex
+Environment=PATH=/var/lib/operator/npm-global/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/bash -lc 'exec pnpm --filter @operator/web exec next start --hostname "${OPERATOR_WEB_HOST:-127.0.0.1}" --port "${OPERATOR_WEB_PORT:-3000}"'
+Restart=always
+RestartSec=3
+KillSignal=SIGTERM
+TimeoutStopSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

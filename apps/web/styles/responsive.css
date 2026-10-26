@@ -1,0 +1,216 @@
+@media (max-width: 1120px) {
+  .operator-shell,
+  .operator-shell.has-preview {
+    grid-template-columns: 240px minmax(0, 1fr);
+  }
+
+  .preview-pane {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
+    display: grid;
+    width: min(430px, calc(100vw - 32px));
+    box-shadow: -20px 0 44px rgba(15, 23, 42, 0.18);
+  }
+
+  .home-groups {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .operator-shell,
+  .operator-shell.sidebar-collapsed,
+  .operator-shell.has-preview {
+    grid-template-columns: 1fr;
+    grid-template-rows: 58px minmax(0, 1fr);
+  }
+
+  .sidebar {
+    position: relative;
+    z-index: 35;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    height: 58px;
+    min-height: 0;
+    align-items: center;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+    overflow: visible;
+  }
+
+  .operator-shell.sidebar-collapsed .sidebar {
+    align-items: center;
+  }
+
+  .brand-row {
+    height: 58px;
+    min-width: 0;
+    padding: 10px 10px 10px 12px;
+  }
+
+  .operator-shell.sidebar-collapsed .brand-row {
+    height: 58px;
+    flex-direction: row;
+    padding: 10px 10px 10px 12px;
+  }
+
+  .brand-link {
+    gap: 7px;
+    white-space: nowrap;
+  }
+
+  .operator-shell.sidebar-collapsed .brand-link span,
+  .operator-shell.sidebar-collapsed .nav-item span {
+    display: inline;
+  }
+
+  .history-block,
+  .sidebar-account,
+  .operator-shell.sidebar-collapsed .history-block,
+  .operator-shell.sidebar-collapsed .sidebar-account {
+    display: none;
+  }
+
+  .operator-shell.history-open .history-block {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 36;
+    display: flex;
+    width: min(86vw, 320px);
+    margin: 0;
+    border-right: 1px solid var(--border);
+    background: #f4f6f8;
+    box-shadow: 18px 0 44px rgba(15, 23, 42, 0.18);
+    padding: 64px 12px 14px;
+  }
+
+  .mobile-history-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 34;
+    display: block;
+    background: rgba(15, 23, 42, 0.26);
+  }
+
+  .primary-nav {
+    display: flex;
+    min-width: 0;
+    justify-content: flex-end;
+    gap: 6px;
+    padding: 0 10px 0 0;
+  }
+
+  .operator-shell.sidebar-collapsed .primary-nav {
+    width: auto;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding: 0 10px 0 0;
+  }
+
+  .nav-item {
+    min-height: 36px;
+    gap: 6px;
+    padding: 0 9px;
+    font-size: 13px;
+  }
+
+  .operator-shell.sidebar-collapsed .nav-item {
+    width: auto;
+    min-height: 36px;
+    gap: 6px;
+    padding: 0 9px;
+  }
+
+  .drive-nav-item {
+    display: none;
+  }
+
+  .workspace {
+    height: calc(100dvh - 58px);
+    min-height: 0;
+  }
+
+  .workspace-floating-actions {
+    top: 8px;
+    right: 8px;
+  }
+
+  .preview-pane {
+    inset: 0;
+    z-index: 45;
+    width: 100vw;
+  }
+
+  .home-groups {
+    grid-template-columns: 1fr;
+  }
+
+  .messages,
+  .composer-footer,
+  .thread-welcome {
+    width: min(100% - 24px, 820px);
+  }
+
+  .scope-welcome {
+    gap: 9px;
+    margin-top: 10px;
+    padding-top: 0;
+  }
+
+  .scope-welcome-header {
+    grid-template-columns: 34px minmax(0, 1fr);
+    gap: 9px;
+  }
+
+  .scope-welcome-header h2 {
+    font-size: 20px;
+  }
+
+  .scope-welcome-header p,
+  .scope-notice {
+    font-size: 12px;
+    line-height: 1.45;
+  }
+
+  .scope-welcome-icon {
+    width: 34px;
+    height: 34px;
+  }
+
+  .scope-output-list {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+  }
+
+  .scope-task-grid {
+    display: flex;
+    gap: 9px;
+    min-height: 154px;
+    align-items: stretch;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    padding-bottom: 2px;
+  }
+
+  .scope-task-card {
+    flex: 0 0 min(300px, 82vw);
+    min-height: 152px;
+    scroll-snap-align: start;
+  }
+
+  .scope-example-block .suggestions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .scope-example-block .suggestions button {
+    max-width: none;
+  }
+
+  .scope-advanced {
+    display: none;
+  }
+}

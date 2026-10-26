@@ -1,0 +1,26 @@
+{
+  "$schema": "https://operator.local/schemas/skill-manifest.v1.json",
+  "id": "industrial-meter-reading",
+  "kind": "agent_skill",
+  "display_name": "Industrial Meter Reading",
+  "description": "Read industrial analog pointer gauges and LED/digital meters from inspection images.",
+  "cache": {
+    "development_root": "skills/local/industrial-meter-reading"
+  },
+  "entrypoints": {
+    "skill": "SKILL.md"
+  },
+  "required_paths": [
+    "SKILL.md"
+  ],
+  "execution": {
+    "evidence_entrypoint": "skill",
+    "required_entrypoints": [
+      "skill"
+    ],
+    "notes": [
+      "Inspect uploaded image attachments directly from the task workspace.",
+      "Return structured JSON readings and a human-readable Markdown review."
+    ]
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "$schema": "https://operator.local/schemas/skill-manifest.v1.json",
+  "id": "Biomni",
+  "kind": "external_agent_package",
+  "display_name": "Biomni",
+  "description": "Stanford Biomni biomedical generalist agent repository for biomedical research tasks.",
+  "source": {
+    "type": "git",
+    "repo": "https://github.com/snap-stanford/Biomni.git",
+    "ref": "main",
+    "commit": "400c1f366b96a35ca253e13c9b06c5076af41d65"
+  },
+  "cache": {
+    "development_root": "skills/vendored/Biomni",
+    "production_root_env": "OPERATOR_SKILL_CACHE_ROOT",
+    "production_path_template": "{root}/{id}/{commit}"
+  },
+  "env": {
+    "root_override": "OPERATOR_BIOMNI_ROOT"
+  },
+  "entrypoints": {
+    "readme": "README.md",
+    "package": "biomni",
+    "agent": "biomni/agent"
+  },
+  "required_paths": [
+    "README.md",
+    "pyproject.toml",
+    "biomni/agent"
+  ],
+  "license": {
+    "notice": "Follow upstream Biomni license and biomedical safety requirements."
+  }
+}

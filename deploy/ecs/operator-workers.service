@@ -1,0 +1,25 @@
+[Unit]
+Description=Operator BullMQ worker service
+After=network-online.target postgresql.service redis-server.service operator.service
+Wants=network-online.target redis-server.service
+
+[Service]
+Type=simple
+User=operator
+Group=operator
+WorkingDirectory=/opt/operator
+EnvironmentFile=-/etc/operator/operator.env
+Environment=NODE_ENV=production
+Environment=HOME=/var/lib/operator
+Environment=CODEX_HOME=/var/lib/operator/.codex
+Environment=PATH=/var/lib/operator/npm-global/bin:/usr/local/bin:/usr/bin:/bin
+ExecStart=/usr/bin/bash -lc 'exec pnpm --filter @operator/web workers'
+Restart=always
+RestartSec=3
+KillSignal=SIGTERM
+TimeoutStopSec=30
+NoNewPrivileges=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

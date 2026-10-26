@@ -1,0 +1,27 @@
+{
+  "$schema": "https://operator.local/schemas/skill-manifest.v1.json",
+  "id": "dianji-assistant",
+  "kind": "agent_skill",
+  "display_name": "电机百事通",
+  "description": "Query Shanghai Dianji University public knowledge, documents, attachments, forms, and templates through the Operator Knowledge Base.",
+  "cache": {
+    "development_root": "skills/local/dianji-assistant"
+  },
+  "entrypoints": {
+    "skill": "SKILL.md"
+  },
+  "required_paths": [
+    "SKILL.md"
+  ],
+  "execution": {
+    "evidence_entrypoint": "skill",
+    "required_entrypoints": [
+      "skill"
+    ],
+    "notes": [
+      "Always query Operator Knowledge Base space dianji before public web search.",
+      "Use operator.knowledge.search, fetch, find_template, and fill_template for SDJU lookup, download, and form draft workflows.",
+      "Every answer must cite local knowledge item sources when available."
+    ]
+  }
+}

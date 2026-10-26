@@ -1,0 +1,36 @@
+{
+  "name": "@operator/knowledge-ingestion",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./archive": "./src/archive.ts",
+    "./crawler": "./src/crawler.ts",
+    "./ingestion": "./src/ingestion.ts",
+    "./parsing": "./src/parsing.ts",
+    "./search": "./src/search.ts",
+    "./transfer": "./src/transfer.ts",
+    "./types": "./src/types.ts",
+    "./utils": "./src/utils.ts"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "transfer": "tsx src/transfer-cli.ts",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@operator/core": "workspace:*",
+    "@operator/db": "workspace:*",
+    "@operator/storage": "workspace:*",
+    "cheerio": "1.1.2",
+    "crawlee": "^3.15.0",
+    "drizzle-orm": "^0.45.0"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "typescript": "^5.8.0",
+    "vitest": "^3.2.0"
+  }
+}

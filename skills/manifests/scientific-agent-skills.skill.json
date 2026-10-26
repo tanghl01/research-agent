@@ -1,0 +1,33 @@
+{
+  "$schema": "https://operator.local/schemas/skill-manifest.v1.json",
+  "id": "scientific-agent-skills",
+  "kind": "agent_skill_collection",
+  "display_name": "scientific-agent-skills",
+  "description": "K-Dense-AI scientific agent skills collection for research, literature review, bioinformatics, chemistry, and scientific tooling.",
+  "source": {
+    "type": "git",
+    "repo": "https://github.com/K-Dense-AI/scientific-agent-skills.git",
+    "ref": "main",
+    "commit": "3b73388d4d706109b4cdcadb952bc020388de8cb"
+  },
+  "cache": {
+    "development_root": "skills/vendored/scientific-agent-skills",
+    "production_root_env": "OPERATOR_SKILL_CACHE_ROOT",
+    "production_path_template": "{root}/{id}/{commit}"
+  },
+  "env": {
+    "root_override": "OPERATOR_SCIENTIFIC_AGENT_SKILLS_ROOT"
+  },
+  "entrypoints": {
+    "readme": "README.md",
+    "skills": "skills"
+  },
+  "required_paths": [
+    "README.md",
+    "skills/literature-review/SKILL.md",
+    "skills/biopython/SKILL.md"
+  ],
+  "license": {
+    "notice": "Follow upstream scientific-agent-skills license and individual skill requirements."
+  }
+}

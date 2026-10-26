@@ -1,0 +1,220 @@
+.drive-page {
+  display: grid;
+  height: 100dvh;
+  grid-template-rows: auto auto auto minmax(0, 1fr);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.drive-topbar,
+.drive-hero,
+.drive-usage,
+.drive-login-panel,
+.drive-list {
+  width: min(1120px, 100%);
+  margin: 0 auto;
+  padding-right: 24px;
+  padding-left: 24px;
+}
+
+.drive-topbar {
+  display: flex;
+  min-height: 62px;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.drive-brand,
+.drive-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.drive-brand {
+  font-weight: 700;
+}
+
+.drive-brand img {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+}
+
+.drive-actions {
+  gap: 8px;
+}
+
+.drive-hero {
+  display: flex;
+  min-height: 112px;
+  align-items: end;
+  justify-content: space-between;
+  gap: 18px;
+  padding-top: 24px;
+  padding-bottom: 20px;
+}
+
+.drive-hero h1 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.1;
+}
+
+.drive-upload-button {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--border-strong);
+  border-radius: 8px;
+  padding: 0 12px;
+  background: var(--text);
+  color: #fff;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.drive-upload-button input {
+  display: none;
+}
+
+.drive-usage {
+  padding-bottom: 20px;
+}
+
+.drive-usage > div:first-child {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.drive-usage strong {
+  color: var(--text);
+}
+
+.drive-usage-track {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--surface-strong);
+}
+
+.drive-usage-track div {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+}
+
+.drive-message {
+  width: min(1072px, calc(100% - 48px));
+  margin: 0 auto 12px;
+  border: 1px solid #fed7aa;
+  border-radius: 8px;
+  padding: 10px 12px;
+  background: #fff7ed;
+  color: #9a3412;
+  font-size: 13px;
+}
+
+.drive-login-panel {
+  display: grid;
+  width: min(640px, calc(100% - 48px));
+  align-content: start;
+  justify-items: start;
+  gap: 14px;
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface);
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+  padding: 22px;
+}
+
+.drive-login-panel h2 {
+  margin: 0;
+  font-size: 18px;
+}
+
+.drive-login-panel p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.drive-login-link {
+  display: inline-flex;
+  min-height: 38px;
+  align-items: center;
+  gap: 7px;
+  border-radius: 8px;
+  background: var(--text);
+  color: #ffffff;
+  padding: 0 14px;
+  font-weight: 600;
+}
+
+.drive-login-panel .drive-message {
+  width: 100%;
+  margin: 0;
+}
+
+.drive-list {
+  display: grid;
+  align-content: start;
+  gap: 1px;
+  min-height: 0;
+  overflow: auto;
+  padding-bottom: 28px;
+}
+
+.drive-row,
+.drive-empty {
+  display: grid;
+  min-height: 60px;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+}
+
+.drive-row {
+  grid-template-columns: 28px minmax(0, 1fr) 36px;
+  gap: 12px;
+}
+
+.drive-row > div {
+  display: grid;
+  min-width: 0;
+  gap: 3px;
+}
+
+.drive-row strong,
+.drive-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.drive-row span,
+.drive-empty {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.drive-row button {
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--muted);
+}
+
+.drive-row button:hover {
+  background: var(--surface-soft);
+  color: #b42318;
+}

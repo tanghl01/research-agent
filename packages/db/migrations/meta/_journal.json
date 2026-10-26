@@ -1,0 +1,55 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1781711008467,
+      "tag": "0000_short_screwball",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1781711798264,
+      "tag": "0001_lame_mockingbird",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1781790830050,
+      "tag": "0002_careless_invaders",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1782615928706,
+      "tag": "0003_hard_exodus",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1782801611234,
+      "tag": "0004_rename_product_scopes",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1782912723024,
+      "tag": "0005_lumpy_killmonger",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1782980091079,
+      "tag": "0006_wild_vanisher",
+      "breakpoints": true
+    }
+  ]
+}

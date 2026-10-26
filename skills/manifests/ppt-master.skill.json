@@ -1,0 +1,136 @@
+{
+  "$schema": "https://operator.local/schemas/skill-manifest.v1.json",
+  "id": "ppt-master",
+  "kind": "agent_skill",
+  "display_name": "ppt-master",
+  "description": "PPT Master skill for SVG-first deck generation, validation, and PPTX export.",
+  "source": {
+    "type": "git",
+    "repo": "https://github.com/hugohe3/ppt-master.git",
+    "ref": "main",
+    "commit": "2b337bec18c2cb1381fee2dfca2e6f6fed463ce6"
+  },
+  "cache": {
+    "development_root": "skills/vendored/ppt-master",
+    "root_subpath": "skills/ppt-master",
+    "production_root_env": "OPERATOR_SKILL_CACHE_ROOT",
+    "production_path_template": "{root}/{id}/{commit}"
+  },
+  "env": {
+    "root_override": "OPERATOR_PPT_MASTER_SKILL_ROOT"
+  },
+  "entrypoints": {
+    "skill": "SKILL.md",
+    "requirements": "requirements.txt",
+    "templates": "templates",
+    "scripts": "scripts"
+  },
+  "runtime": {
+    "type": "python_venv",
+    "cache_env": "OPERATOR_RUNTIME_CACHE_ROOT",
+    "cache_key_files": [
+      "requirements.txt"
+    ],
+    "setup": {
+      "cwd": ".",
+      "complete_marker": ".operator-runtime-ready",
+      "commands": [
+        "mkdir -p {runtime_root}",
+        "test -x {python} || {system_python} -m venv {venv}",
+        "{pip} install --upgrade pip",
+        "{pip} install -r requirements.txt",
+        "touch {setup_complete_path}"
+      ]
+    },
+    "commands": {
+      "python": "{python}",
+      "pip": "{pip}",
+      "project_manager": "{python} {skill_root}/scripts/project_manager.py",
+      "image_gen": "env IMAGE_BACKEND=openai OPENAI_API_KEY=\"$OPERATOR_PACKY_IMAGE_API_KEY\" OPENAI_BASE_URL=\"${OPERATOR_PACKY_IMAGE_BASE_URL:-https://www.packyapi.com/v1}\" OPENAI_MODEL=\"${OPERATOR_PACKY_IMAGE_MODEL:-gpt-image-2}\" OPENAI_SIZE_PRESET=gpt-image OPENAI_RESPONSE_FORMAT=url OPENAI_OUTPUT_FORMAT=png OPENAI_QUALITY=\"${OPERATOR_PACKY_IMAGE_QUALITY:-low}\" {python} {skill_root}/scripts/image_gen.py",
+      "svg_to_pptx": "{python} {skill_root}/scripts/svg_to_pptx.py",
+      "svg_quality_checker": "{python} {skill_root}/scripts/svg_quality_checker.py"
+    },
+    "notes": [
+      "Runtime dependencies are installed once under OPERATOR_RUNTIME_CACHE_ROOT and reused across runs.",
+      "Generated presentation projects and artifacts must stay in the task workspace, not in the skill source tree.",
+      "Use runtime.commands.image_gen for PPT Master image generation. It maps OPERATOR_PACKY_IMAGE_* to OpenAI-compatible variables only for that child process; do not set a global OPENAI_API_KEY."
+    ]
+  },
+  "install": {
+    "required_env": [
+      "OPERATOR_PACKY_IMAGE_API_KEY",
+      "OPERATOR_PACKY_IMAGE_BASE_URL",
+      "OPERATOR_PACKY_IMAGE_MODEL"
+    ],
+    "smoke_tests": [
+      {
+        "name": "project_manager_help",
+        "command": "{python} {skill_root}/scripts/project_manager.py --help",
+        "timeout_ms": 30000
+      },
+      {
+        "name": "svg_to_pptx_help",
+        "command": "{python} {skill_root}/scripts/svg_to_pptx.py --help",
+        "timeout_ms": 30000
+      },
+      {
+        "name": "svg_to_pptx_minimal_export",
+        "command": "bash {repo_root}/skills/install-checks/ppt-master-smoke.sh {python} {skill_root}",
+        "timeout_ms": 120000
+      }
+    ],
+    "capability_tests": [
+      {
+        "name": "golden_image_generation",
+        "type": "golden-example",
+        "source": "operator-golden-example",
+        "command": "mkdir -p {workspace}/images && {runtime.commands.image_gen} \"Operator capability package validation image: clean presentation cover, white background, blue geometric accent\" --aspect_ratio 1:1 --image_size 512px --output {workspace}/images --filename capability_image",
+        "expectedArtifacts": [
+          {
+            "path": "images/capability_image.png",
+            "type": "image",
+            "minBytes": 1024
+          }
+        ],
+        "timeout_ms": 180000
+      },
+      {
+        "name": "golden_pptx_export",
+        "type": "golden-example",
+        "source": "operator-golden-example",
+        "command": "bash {repo_root}/skills/install-checks/ppt-master-smoke.sh {python} {skill_root}",
+        "timeout_ms": 120000
+      }
+    ]
+  },
+  "configuration": {
+    "requiredEnv": [
+      "OPERATOR_PACKY_IMAGE_API_KEY",
+      "OPERATOR_PACKY_IMAGE_BASE_URL",
+      "OPERATOR_PACKY_IMAGE_MODEL"
+    ],
+    "providers": [
+      {
+        "id": "image-generation",
+        "interface": "openai-compatible-image-generation",
+        "required": true,
+        "env": {
+          "apiKey": "OPERATOR_PACKY_IMAGE_API_KEY",
+          "baseUrl": "OPERATOR_PACKY_IMAGE_BASE_URL",
+          "model": "OPERATOR_PACKY_IMAGE_MODEL"
+        },
+        "compatibleProviders": ["packy", "openai-compatible"]
+      }
+    ]
+  },
+  "required_paths": [
+    "SKILL.md",
+    "requirements.txt",
+    "scripts/project_manager.py",
+    "scripts/svg_to_pptx.py",
+    "templates/README.md"
+  ],
+  "license": {
+    "notice": "Follow upstream ppt-master license and attribution requirements."
+  }
+}

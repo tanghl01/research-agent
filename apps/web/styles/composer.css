@@ -1,0 +1,206 @@
+.composer-footer {
+  position: relative;
+  display: grid;
+  width: min(820px, calc(100% - 40px));
+  margin: 0 auto;
+  gap: 8px;
+  padding: 12px 0 12px;
+}
+
+.home-thread .composer-footer {
+  width: min(760px, calc(100% - 40px));
+  margin: 0 auto;
+  padding: 12px 0 14px;
+}
+
+.thread-root.has-scope-guide:has(.scope-welcome) .thread-viewport {
+  overflow: hidden;
+}
+
+.thread-root.has-scope-guide:has(.scope-welcome) .scope-welcome {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-bottom: 16px;
+  scrollbar-width: none;
+}
+
+.thread-root.has-scope-guide:has(.scope-welcome) .scope-welcome::-webkit-scrollbar {
+  display: none;
+}
+
+.thread-root.has-scope-guide:has(.scope-welcome) .messages,
+.thread-root.has-scope-guide:has(.scope-welcome) .scroll-button {
+  display: none;
+}
+
+.thread-root.has-scope-guide:has(.scope-welcome) .composer-footer {
+  position: relative;
+  bottom: auto;
+  flex: 0 0 auto;
+  width: min(760px, calc(100% - 40px));
+  margin: 0 auto;
+  background: #ffffff;
+  padding: 10px 0 18px;
+}
+
+.thread-scroll-button-host {
+  position: absolute;
+  right: 0;
+  bottom: 132px;
+  left: 0;
+  z-index: 12;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.thread-root.has-external-composer .thread-scroll-button-host {
+  bottom: 14px;
+}
+
+.scroll-button {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 1px solid rgba(152, 162, 179, 0.58);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 10px 24px rgba(15, 23, 42, 0.14);
+  color: #344054;
+  pointer-events: auto;
+  transition:
+    opacity 0.16s ease,
+    transform 0.16s ease,
+    visibility 0.16s ease;
+  backdrop-filter: blur(10px);
+}
+
+.scroll-button:hover:not(:disabled) {
+  border-color: rgba(102, 112, 133, 0.72);
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateY(-1px);
+}
+
+.scroll-button:disabled {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(4px);
+}
+
+.composer-root {
+  display: block;
+}
+
+.composer-shell {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  min-height: 52px;
+  gap: 8px;
+  align-items: end;
+  border: 1px solid var(--border-strong);
+  border-radius: 18px;
+  background: #ffffff;
+  box-shadow: 0 18px 60px rgba(31, 41, 55, 0.1);
+  padding: 8px 10px;
+}
+
+.composer-field {
+  display: grid;
+  min-width: 0;
+  gap: 6px;
+}
+
+.composer-attachments {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.composer-attachments:empty {
+  display: none;
+}
+
+.attachment-chip {
+  display: inline-flex;
+  max-width: min(100%, 320px);
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--surface-soft);
+  color: #344054;
+  padding: 6px 7px;
+  font-size: 12px;
+  line-height: 1.2;
+}
+
+.attachment-chip span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.attachment-remove {
+  display: grid;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 6px;
+  color: var(--muted);
+}
+
+.attachment-remove:hover {
+  background: #ffffff;
+  color: #111827;
+}
+
+.composer-input {
+  min-height: 34px;
+  max-height: 150px;
+  resize: none;
+  border: 0;
+  outline: 0;
+  padding: 6px 4px;
+  line-height: 1.45;
+}
+
+.composer-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tool-button,
+.send-button {
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border-radius: 8px;
+}
+
+.tool-button:hover {
+  background: var(--surface-soft);
+}
+
+.tool-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.tool-button:disabled:hover {
+  background: transparent;
+}
+
+.send-button {
+  background: #111827;
+  color: #ffffff;
+}

@@ -1,0 +1,30 @@
+{
+  "name": "operator-micro-agent-runtime-bench",
+  "generatedAt": "2026-06-14T03:22:28.123Z",
+  "purpose": "Fast smoke tasks for comparing agent runtimes before running a larger benchmark such as Terminal-Bench.",
+  "tasks": [
+    {
+      "id": "file-create-exact",
+      "taskArea": "filesystem",
+      "prompt": "Create agent-smoke.txt containing exactly runtime-ok.",
+      "verifier": "File exists and content equals runtime-ok."
+    },
+    {
+      "id": "web-current-source",
+      "taskArea": "web/search/fetch",
+      "prompt": "Find the current GitHub repository URL for Microsoft Playwright MCP and write it to web-smoke.md.",
+      "verifier": "File exists and contains github.com/microsoft/playwright-mcp."
+    },
+    {
+      "id": "download-known-url",
+      "taskArea": "download/artifact",
+      "prompt": "Download https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf and report size/sha256.",
+      "verifier": "PDF exists, nonzero size, sha256 matches expected baseline."
+    }
+  ],
+  "largerBenchmarkCandidate": {
+    "name": "Terminal-Bench",
+    "repo": "https://github.com/harbor-framework/terminal-bench",
+    "reason": "Terminal-based end-to-end agent tasks map well to Operator's coding/runtime requirements."
+  }
+}

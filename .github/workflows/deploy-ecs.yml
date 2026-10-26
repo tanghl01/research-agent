@@ -1,0 +1,358 @@
+name: Deploy ECS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      verify_document_runtime:
+        description: "Install TeXLive/matplotlib on the CI runner and force document-runtime PDF tests."
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: operator-ecs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    name: Verify
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.5.2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck Mastra app
+        run: pnpm --filter @operator/mastra-app typecheck
+
+      - name: Typecheck web app
+        run: pnpm --filter @operator/web typecheck
+
+      - name: Install document runtime
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.verify_document_runtime }}
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            python3-matplotlib \
+            texlive-xetex \
+            texlive-lang-chinese \
+            texlive-latex-extra \
+            texlive-fonts-recommended
+          xelatex --version
+          python3 -c 'import matplotlib; print(matplotlib.__version__)'
+
+      - name: Check optional document runtime
+        run: |
+          set -euo pipefail
+          if command -v xelatex >/dev/null 2>&1; then
+            xelatex --version | head -1
+          else
+            printf '%s\n' "::notice::xelatex is not installed on this CI runner; document-runtime PDF tests will be skipped."
+          fi
+          if python3 -c 'import matplotlib' >/dev/null 2>&1; then
+            python3 -c 'import matplotlib; print(matplotlib.__version__)'
+          else
+            printf '%s\n' "::notice::python3-matplotlib is not installed on this CI runner; matplotlib-backed optional tests require the document runtime."
+          fi
+
+      - name: Sync Operator capabilities
+        run: pnpm capabilities:sync --all --kind workflow
+
+      - name: Test Mastra app
+        env:
+          OPERATOR_RUN_DOCUMENT_RUNTIME_TESTS: ${{ github.event_name == 'workflow_dispatch' && inputs.verify_document_runtime && '1' || '' }}
+        run: pnpm --filter @operator/mastra-app test
+
+      - name: Test web app
+        run: pnpm --filter @operator/web test
+
+      - name: Build web app
+        run: pnpm --filter @operator/web build
+
+      - name: Upload web build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: operator-web-next
+          path: |
+            apps/web/.next
+            !apps/web/.next/cache/**
+          include-hidden-files: true
+          retention-days: 1
+
+      - name: Install Playwright Chromium
+        run: pnpm --filter @operator/web exec playwright install --with-deps chromium
+
+      - name: Test web default and skill chat flows
+        run: pnpm --filter @operator/web exec playwright test e2e/operator-chat.spec.ts
+
+  deploy:
+    name: Deploy to ECS
+    needs: verify
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    environment: production
+    env:
+      ECS_HOST: ${{ secrets.ECS_HOST }}
+      ECS_SSH_HOST: ${{ secrets.ECS_SSH_HOST || secrets.ECS_HOST }}
+      ECS_USER: ${{ secrets.ECS_USER }}
+      ECS_PORT: ${{ secrets.ECS_PORT || '22' }}
+      ECS_APP_DIR: ${{ secrets.ECS_APP_DIR || '/opt/operator' }}
+      ECS_PUBLIC_URL: ${{ secrets.ECS_PUBLIC_URL || 'https://www.suanziai.com' }}
+      OPERATOR_DEPLOYMENT_STAGE: ${{ secrets.OPERATOR_DEPLOYMENT_STAGE || 'staging' }}
+      OPERATOR_TLS_EMAIL: ${{ secrets.OPERATOR_TLS_EMAIL }}
+      CODEX_HTTPS_PROXY: ${{ secrets.CODEX_HTTPS_PROXY }}
+      OPERATOR_AGNES_API_KEY: ${{ secrets.OPERATOR_AGNES_API_KEY }}
+      OPERATOR_DEEPSEEK_API_KEY: ${{ secrets.OPERATOR_DEEPSEEK_API_KEY }}
+      OPERATOR_PACKY_API_KEY: ${{ secrets.OPERATOR_PACKY_API_KEY }}
+      OPERATOR_PACKY_BASE_URL: ${{ secrets.OPERATOR_PACKY_BASE_URL || 'https://www.packyapi.com/v1' }}
+      OPERATOR_PACKY_MODEL: ${{ secrets.OPERATOR_PACKY_MODEL || 'gpt-5.5' }}
+      OPERATOR_PACKY_ANTHROPIC_BASE_URL: ${{ secrets.OPERATOR_PACKY_ANTHROPIC_BASE_URL || 'https://www.packyapi.com' }}
+      OPERATOR_PACKY_CLAUDE_MODEL: ${{ secrets.OPERATOR_PACKY_CLAUDE_MODEL || 'claude-opus-4-8' }}
+      OPERATOR_PACKY_IMAGE_API_KEY: ${{ secrets.OPERATOR_PACKY_IMAGE_API_KEY }}
+      OPERATOR_PACKY_IMAGE_BASE_URL: ${{ secrets.OPERATOR_PACKY_IMAGE_BASE_URL || secrets.OPERATOR_PACKY_BASE_URL || 'https://www.packyapi.com/v1' }}
+      OPERATOR_PACKY_IMAGE_MODEL: ${{ secrets.OPERATOR_PACKY_IMAGE_MODEL || 'gpt-image-2' }}
+      OPERATOR_PACKY_IMAGE_QUALITY: ${{ secrets.OPERATOR_PACKY_IMAGE_QUALITY || 'low' }}
+      QINYAN_API_KEY: ${{ secrets.QINYAN_API_KEY }}
+      OPERATOR_BRAVE_SEARCH_API_KEY: ${{ secrets.OPERATOR_BRAVE_SEARCH_API_KEY }}
+      OPERATOR_TAVILY_API_KEY: ${{ secrets.OPERATOR_TAVILY_API_KEY }}
+      OPERATOR_SERPER_API_KEY: ${{ secrets.OPERATOR_SERPER_API_KEY }}
+      OPERATOR_BING_SEARCH_API_KEY: ${{ secrets.OPERATOR_BING_SEARCH_API_KEY }}
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      OPERATOR_SESSION_SECRET: ${{ secrets.OPERATOR_SESSION_SECRET }}
+      OPERATOR_PHONE_LOGIN_PROVIDER: ${{ secrets.OPERATOR_PHONE_LOGIN_PROVIDER || 'aliyun-dypns' }}
+      OPERATOR_PHONE_LOGIN_CODE_TTL_SECONDS: ${{ secrets.OPERATOR_PHONE_LOGIN_CODE_TTL_SECONDS || '600' }}
+      ALIYUN_ACCESS_KEY_ID: ${{ secrets.ALIYUN_ACCESS_KEY_ID }}
+      ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.ALIYUN_ACCESS_KEY_SECRET }}
+      OPERATOR_ALIYUN_ACCESS_KEY_ID: ${{ secrets.OPERATOR_ALIYUN_ACCESS_KEY_ID }}
+      OPERATOR_ALIYUN_ACCESS_KEY_SECRET: ${{ secrets.OPERATOR_ALIYUN_ACCESS_KEY_SECRET }}
+      OPERATOR_ALIYUN_REGION_ID: ${{ secrets.OPERATOR_ALIYUN_REGION_ID || 'cn-hangzhou' }}
+      OPERATOR_ALIYUN_DYPNS_ENDPOINT: ${{ secrets.OPERATOR_ALIYUN_DYPNS_ENDPOINT || 'dypnsapi.aliyuncs.com' }}
+      OPERATOR_ALIYUN_DYPNS_TEMPLATE_PARAM: ${{ secrets.OPERATOR_ALIYUN_DYPNS_TEMPLATE_PARAM }}
+      OPERATOR_ALIYUN_DYPNS_CODE_LENGTH: ${{ secrets.OPERATOR_ALIYUN_DYPNS_CODE_LENGTH || '6' }}
+      OPERATOR_ALIYUN_DYPNS_INTERVAL_SECONDS: ${{ secrets.OPERATOR_ALIYUN_DYPNS_INTERVAL_SECONDS || '60' }}
+      OPERATOR_ALIYUN_DYPNS_RETURN_VERIFY_CODE: ${{ secrets.OPERATOR_ALIYUN_DYPNS_RETURN_VERIFY_CODE || 'false' }}
+      OPERATOR_STORAGE_PROVIDER: ${{ secrets.OPERATOR_STORAGE_PROVIDER }}
+      OPERATOR_STORAGE_ROOT: ${{ secrets.OPERATOR_STORAGE_ROOT }}
+      OPERATOR_STORAGE_ARTIFACT_BUCKET: ${{ secrets.OPERATOR_STORAGE_ARTIFACT_BUCKET }}
+      OPERATOR_STORAGE_DRIVE_BUCKET: ${{ secrets.OPERATOR_STORAGE_DRIVE_BUCKET }}
+      OPERATOR_STORAGE_CACHE_BUCKET: ${{ secrets.OPERATOR_STORAGE_CACHE_BUCKET }}
+      OPERATOR_S3_ENDPOINT: ${{ secrets.OPERATOR_S3_ENDPOINT }}
+      OPERATOR_S3_REGION: ${{ secrets.OPERATOR_S3_REGION }}
+      OPERATOR_S3_ACCESS_KEY_ID: ${{ secrets.OPERATOR_S3_ACCESS_KEY_ID }}
+      OPERATOR_S3_SECRET_ACCESS_KEY: ${{ secrets.OPERATOR_S3_SECRET_ACCESS_KEY }}
+      OPERATOR_S3_FORCE_PATH_STYLE: ${{ secrets.OPERATOR_S3_FORCE_PATH_STYLE }}
+      REDIS_URL: ${{ secrets.REDIS_URL }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Download web build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: operator-web-next
+          path: apps/web/.next
+
+      - name: Validate deployment secrets
+        env:
+          ECS_SSH_PRIVATE_KEY: ${{ secrets.ECS_SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          test -n "$ECS_SSH_HOST"
+          test -n "$ECS_USER"
+          test -n "$ECS_PORT"
+          test -n "$ECS_APP_DIR"
+          test -n "$ECS_SSH_PRIVATE_KEY"
+          if [ -z "${OPERATOR_PACKY_IMAGE_API_KEY:-}" ]; then
+            printf '%s\n' "OPERATOR_PACKY_IMAGE_API_KEY GitHub secret is required because ppt-master is a mandatory production skill." >&2
+            exit 1
+          fi
+
+      - name: Validate optional account backend secrets
+        run: |
+          set -euo pipefail
+          if [ -z "${ALIYUN_ACCESS_KEY_ID:-${OPERATOR_ALIYUN_ACCESS_KEY_ID:-}}" ] || [ -z "${ALIYUN_ACCESS_KEY_SECRET:-${OPERATOR_ALIYUN_ACCESS_KEY_SECRET:-}}" ]; then
+            printf '%s\n' "::warning::Aliyun SMS secrets are not fully set; phone registration code delivery will fail until ALIYUN_ACCESS_KEY_ID and ALIYUN_ACCESS_KEY_SECRET are configured."
+          fi
+          if [ -z "${DATABASE_URL:-}" ]; then
+            printf '%s\n' "::notice::DATABASE_URL is not set; deployment will provision a local PostgreSQL database on the ECS host."
+          fi
+          if [ -z "${OPERATOR_SESSION_SECRET:-}" ]; then
+            printf '%s\n' "::notice::OPERATOR_SESSION_SECRET is not set; deployment will generate a persistent server-local session secret."
+          fi
+          if [ "${OPERATOR_STORAGE_PROVIDER:-}" = "s3" ] && [ -z "${OPERATOR_S3_REGION:-}" ]; then
+            printf '%s\n' "::warning::OPERATOR_STORAGE_PROVIDER=s3 but OPERATOR_S3_REGION is not set; deployment will fall back to local ECS object storage unless the host already has complete S3 settings."
+          fi
+
+      - name: Configure SSH
+        env:
+          ECS_SSH_PRIVATE_KEY: ${{ secrets.ECS_SSH_PRIVATE_KEY }}
+        run: |
+          set -euo pipefail
+          install -m 700 -d ~/.ssh
+          printf '%s\n' "$ECS_SSH_PRIVATE_KEY" > ~/.ssh/operator-ecs
+          chmod 600 ~/.ssh/operator-ecs
+          ssh-keyscan -p "$ECS_PORT" "$ECS_SSH_HOST" >> ~/.ssh/known_hosts
+
+      - name: Prepare ECS directories
+        run: |
+          set -euo pipefail
+          timeout --kill-after=30s 5m ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=20 -o TCPKeepAlive=yes -i ~/.ssh/operator-ecs -p "$ECS_PORT" "$ECS_USER@$ECS_SSH_HOST" \
+            "ECS_APP_DIR='$ECS_APP_DIR' bash -se" <<'REMOTE'
+          set -euo pipefail
+          if ! getent group operator >/dev/null 2>&1; then
+            groupadd --system operator
+          fi
+          if ! id -u operator >/dev/null 2>&1; then
+            useradd --system --create-home --home-dir /var/lib/operator --shell /usr/sbin/nologin --gid operator operator
+          fi
+          install -d -m 755 -o operator -g operator "$ECS_APP_DIR"
+          install -d -m 750 -o root -g operator /etc/operator
+          install -d -m 750 -o operator -g operator /var/lib/operator
+          install -d -m 750 -o operator -g operator /var/lib/operator/skills
+          install -d -m 750 -o operator -g operator /var/lib/operator/runtimes
+          install -d -m 750 -o operator -g operator /var/lib/operator/object-storage
+          install -d -m 750 -o operator -g operator /var/lib/operator/npm-global
+          install -d -m 750 -o operator -g operator /var/lib/operator/.codex
+          REMOTE
+
+      - name: Sync source to ECS
+        run: |
+          set -euo pipefail
+          timeout --kill-after=30s 10m rsync -az --delete --chown=operator:operator \
+            -e "ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=20 -o TCPKeepAlive=yes -i ~/.ssh/operator-ecs -p $ECS_PORT" \
+            --exclude '.git/' \
+            --exclude '.venv/' \
+            --exclude 'node_modules/' \
+            --exclude 'apps/*/node_modules/' \
+            --exclude 'playwright-report/' \
+            --exclude 'test-results/' \
+            --exclude 'apps/web/playwright-report/' \
+            --exclude 'apps/web/test-results/' \
+            --exclude 'tmp/' \
+            --exclude 'skills/vendored/' \
+            --exclude '.env' \
+            ./ "$ECS_USER@$ECS_SSH_HOST:$ECS_APP_DIR/"
+
+      - name: Install and restart ECS service
+        run: |
+          set -euo pipefail
+          operator_deploy_env_b64="$(
+            python3 - <<'PY'
+          import base64
+          import json
+          import os
+
+          keys = [
+              "ECS_APP_DIR",
+              "GITHUB_SHA",
+              "OPERATOR_DEPLOYMENT_STAGE",
+              "OPERATOR_TLS_EMAIL",
+              "CODEX_HTTPS_PROXY",
+              "OPERATOR_AGNES_API_KEY",
+              "OPERATOR_DEEPSEEK_API_KEY",
+              "OPERATOR_PACKY_API_KEY",
+              "OPERATOR_PACKY_BASE_URL",
+              "OPERATOR_PACKY_MODEL",
+              "OPERATOR_PACKY_ANTHROPIC_BASE_URL",
+              "OPERATOR_PACKY_CLAUDE_MODEL",
+              "OPERATOR_PACKY_IMAGE_API_KEY",
+              "OPERATOR_PACKY_IMAGE_BASE_URL",
+              "OPERATOR_PACKY_IMAGE_MODEL",
+              "OPERATOR_PACKY_IMAGE_QUALITY",
+              "QINYAN_API_KEY",
+              "OPERATOR_BRAVE_SEARCH_API_KEY",
+              "OPERATOR_TAVILY_API_KEY",
+              "OPERATOR_SERPER_API_KEY",
+              "OPERATOR_BING_SEARCH_API_KEY",
+              "DATABASE_URL",
+              "OPERATOR_SESSION_SECRET",
+              "OPERATOR_PHONE_LOGIN_PROVIDER",
+              "OPERATOR_PHONE_LOGIN_CODE_TTL_SECONDS",
+              "ALIYUN_ACCESS_KEY_ID",
+              "ALIYUN_ACCESS_KEY_SECRET",
+              "OPERATOR_ALIYUN_ACCESS_KEY_ID",
+              "OPERATOR_ALIYUN_ACCESS_KEY_SECRET",
+              "OPERATOR_ALIYUN_REGION_ID",
+              "OPERATOR_ALIYUN_DYPNS_ENDPOINT",
+              "OPERATOR_ALIYUN_DYPNS_TEMPLATE_PARAM",
+              "OPERATOR_ALIYUN_DYPNS_CODE_LENGTH",
+              "OPERATOR_ALIYUN_DYPNS_INTERVAL_SECONDS",
+              "OPERATOR_ALIYUN_DYPNS_RETURN_VERIFY_CODE",
+              "OPERATOR_STORAGE_PROVIDER",
+              "OPERATOR_STORAGE_ROOT",
+              "OPERATOR_STORAGE_ARTIFACT_BUCKET",
+              "OPERATOR_STORAGE_DRIVE_BUCKET",
+              "OPERATOR_STORAGE_CACHE_BUCKET",
+              "OPERATOR_S3_ENDPOINT",
+              "OPERATOR_S3_REGION",
+              "OPERATOR_S3_ACCESS_KEY_ID",
+              "OPERATOR_S3_SECRET_ACCESS_KEY",
+              "OPERATOR_S3_FORCE_PATH_STYLE",
+              "REDIS_URL",
+          ]
+          payload = {key: os.environ.get(key, "") for key in keys}
+          print(base64.b64encode(json.dumps(payload, separators=(",", ":")).encode("utf-8")).decode("ascii"))
+          PY
+          )"
+          timeout --kill-after=30s 25m ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=20 -o TCPKeepAlive=yes -i ~/.ssh/operator-ecs -p "$ECS_PORT" "$ECS_USER@$ECS_SSH_HOST" \
+            "OPERATOR_DEPLOY_ENV_B64='$operator_deploy_env_b64' bash -se" < deploy/ecs/install-and-restart.sh
+
+      - name: Verify public endpoints
+        run: |
+          set -euo pipefail
+
+          timeout --kill-after=30s 5m ssh -o ServerAliveInterval=30 -o ServerAliveCountMax=20 -o TCPKeepAlive=yes -i ~/.ssh/operator-ecs -p "$ECS_PORT" "$ECS_USER@$ECS_SSH_HOST" \
+            "bash -se" <<'REMOTE'
+          set -euo pipefail
+          curl -fsS http://127.0.0.1/healthz
+          curl -fsSI http://127.0.0.1/ >/tmp/operator-home.headers
+          curl -fsS http://127.0.0.1/ >/tmp/operator-home.html
+          grep -q '算子' /tmp/operator-home.html
+          curl -fsS http://127.0.0.1/api/operator/scopes >/tmp/operator-scopes.json
+          jq -e '.catalog.skills | length > 0' /tmp/operator-scopes.json
+          if ! jq -e '[.catalog.skills[] | select(.available == false and (.id | IN("qinyan-academic-skills") | not))] | length == 0' /tmp/operator-scopes.json; then
+            printf '%s\n' "Unavailable Operator skills on local public route:" >&2
+            jq -r '.catalog.skills[] | select(.available == false and (.id | IN("qinyan-academic-skills") | not)) | "- \(.id): \(.unavailableReason // "unavailable")"' /tmp/operator-scopes.json >&2
+            exit 1
+          fi
+          curl -fsS http://127.0.0.1/api/operator/backend/status >/tmp/operator-backend-status.json
+          jq -e '.backend.enabled == true and .backend.databaseConfigured == true and .backend.identityConfigured == true and .backend.queueConfigured == true' /tmp/operator-backend-status.json
+          REMOTE
+
+          public_url="${ECS_PUBLIC_URL:-}"
+          if [ -n "$public_url" ]; then
+            public_url="${public_url%/}"
+            if curl -fsS --connect-timeout 10 --max-time 20 "$public_url/healthz" >/dev/null; then
+              curl -fsSI --connect-timeout 10 --max-time 20 "$public_url/" >/tmp/operator-public-home.headers
+              curl -fsS --connect-timeout 10 --max-time 20 "$public_url/api/operator/scopes" >/tmp/operator-public-scopes.json
+              jq -e '.catalog.skills | length > 0' /tmp/operator-public-scopes.json
+              if ! jq -e '[.catalog.skills[] | select(.available == false and (.id | IN("qinyan-academic-skills") | not))] | length == 0' /tmp/operator-public-scopes.json; then
+                printf '%s\n' "Unavailable Operator skills on public URL:" >&2
+                jq -r '.catalog.skills[] | select(.available == false and (.id | IN("qinyan-academic-skills") | not)) | "- \(.id): \(.unavailableReason // "unavailable")"' /tmp/operator-public-scopes.json >&2
+                exit 1
+              fi
+              curl -fsS --connect-timeout 10 --max-time 20 "$public_url/api/operator/backend/status" >/tmp/operator-public-backend-status.json
+              jq -e '.backend.enabled == true and .backend.databaseConfigured == true and .backend.identityConfigured == true and .backend.queueConfigured == true' /tmp/operator-public-backend-status.json
+            else
+              printf '%s\n' "::warning::Public Operator URL is not reachable from the GitHub runner. The service is healthy on the ECS host; check the cloud security group/firewall for inbound HTTP/HTTPS."
+            fi
+          fi

@@ -1,0 +1,122 @@
+{
+  "$schema": "https://operator.local/schemas/skill-manifest.v1.json",
+  "id": "text-to-cad",
+  "kind": "agent_skill_collection",
+  "display_name": "text-to-cad",
+  "description": "Text-to-CAD skill and CAD tooling collection for CAD, CAM, robot description, and manufacturing workflows.",
+  "source": {
+    "type": "git",
+    "repo": "https://github.com/earthtojake/text-to-cad.git",
+    "ref": "main",
+    "commit": "1ad925e8dd33b0cef3796a9f2f5e471b8a5613d1"
+  },
+  "cache": {
+    "development_root": "skills/vendored/text-to-cad",
+    "production_root_env": "OPERATOR_SKILL_CACHE_ROOT",
+    "production_path_template": "{root}/{id}/{commit}"
+  },
+  "env": {
+    "root_override": "OPERATOR_TEXT_TO_CAD_ROOT"
+  },
+  "entrypoints": {
+    "readme": "README.md",
+    "skills": "skills",
+    "cad_skill": "skills/cad/SKILL.md"
+  },
+  "required_paths": [
+    "README.md",
+    "skills/cad/SKILL.md",
+    "skills/cad-viewer/SKILL.md"
+  ],
+  "subskills": {
+    "cad": {
+      "display_name": "text-to-cad CAD",
+      "description": "STEP-first parametric CAD generation, inspection, snapshot, and validation.",
+      "root_subpath": "skills/cad",
+      "entrypoints": {
+        "skill": "SKILL.md",
+        "requirements": "requirements.txt",
+        "scripts": "scripts",
+        "step": "scripts/step",
+        "inspect": "scripts/inspect",
+        "snapshot": "scripts/snapshot",
+        "benchmark_01": "../../benchmarks/01-rectangular-calibration-block.md",
+        "benchmark_10": "../../benchmarks/10-planetary-gear-stage.md"
+      },
+      "required_paths": [
+        "SKILL.md",
+        "requirements.txt",
+        "scripts/step",
+        "scripts/inspect",
+        "scripts/snapshot",
+        "scripts/packages/cadpy/pyproject.toml"
+      ],
+      "runtime": {
+        "type": "python_venv",
+        "cache_env": "OPERATOR_RUNTIME_CACHE_ROOT",
+        "cache_key_files": [
+          "requirements.txt",
+          "scripts/packages/cadpy/pyproject.toml"
+        ],
+        "setup": {
+          "cwd": ".",
+          "complete_marker": ".operator-runtime-ready",
+          "commands": [
+            "mkdir -p {runtime_root}",
+            "test -x {python} || {system_python} -m venv {venv}",
+            "{pip} install --upgrade pip",
+            "{pip} install -r requirements.txt",
+            "touch {setup_complete_path}"
+          ]
+        },
+        "commands": {
+          "python": "{python}",
+          "pip": "{pip}",
+          "step": "{python} {skill_root}/scripts/step",
+          "inspect": "{python} {skill_root}/scripts/inspect",
+          "snapshot": "{python} {skill_root}/scripts/snapshot"
+        },
+        "notes": [
+          "Run setup commands from setup_cwd, which is the upstream CAD skill root.",
+          "Reuse runtime_root across tasks with the same upstream commit and requirements hash.",
+          "Generated CAD source, STEP, validation JSON, snapshots, and reports still belong in the task workspace."
+        ]
+      },
+      "execution": {
+        "evidence_entrypoint": "skill",
+        "required_entrypoints": [
+          "skill",
+          "step",
+          "inspect",
+          "snapshot"
+        ],
+        "required_commands": [
+          "step",
+          "inspect",
+          "snapshot"
+        ],
+        "adapter_paths": [
+          "skills/adapters/text-to-cad-cad.md",
+          "skills/adapters/text-to-cad-cad/benchmark-10-safe.py"
+        ],
+        "agent_guard": {
+          "blocked_tool_action_patterns": [
+            "\\bdir\\s*\\(",
+            "\\[[^\\]]+\\bfor\\b[^\\]]+\\bin\\s+dir\\s*\\(",
+            "<<\\s*['\"]?[A-Za-z_][A-Za-z0-9_]*",
+            "\\b(?:Extruder|PolarArray|PolarPattern|WorkPlane|PrismaticTension|RectangularChamfer|make_loft)\\b"
+          ],
+          "blocked_tool_action_message": "The text-to-cad CAD adapter forbids broad build123d introspection loops. Read the upstream references or use the adapter safe primitive pattern instead."
+        },
+        "notes": [
+          "Use STEP as the primary artifact.",
+          "Run inspect refs with facts, planes, and positioning.",
+          "Run snapshot for the primary STEP unless no valid geometry exists."
+        ]
+      }
+    }
+  },
+  "license": {
+    "notice": "Follow upstream text-to-cad license and CAD/manufacturing tool requirements."
+  }
+}

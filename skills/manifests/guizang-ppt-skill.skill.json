@@ -1,0 +1,36 @@
+{
+  "$schema": "https://operator.local/schemas/skill-manifest.v1.json",
+  "id": "guizang-ppt-skill",
+  "kind": "agent_skill",
+  "display_name": "guizang-ppt-skill",
+  "description": "Single-file horizontal HTML presentation skill with magazine and Swiss-style templates.",
+  "source": {
+    "type": "git",
+    "repo": "https://github.com/op7418/guizang-ppt-skill.git",
+    "ref": "main",
+    "commit": "82fe5ae129e8c2a12e1155fcabed6703342749d6"
+  },
+  "cache": {
+    "development_root": "skills/vendored/guizang-ppt-skill",
+    "production_root_env": "OPERATOR_SKILL_CACHE_ROOT",
+    "production_path_template": "{root}/{id}/{commit}"
+  },
+  "env": {
+    "root_override": "OPERATOR_GUIZANG_PPT_SKILL_ROOT"
+  },
+  "entrypoints": {
+    "skill": "SKILL.md",
+    "template": "assets/template.html",
+    "swiss_template": "assets/template-swiss.html",
+    "swiss_validator": "scripts/validate-swiss-deck.mjs"
+  },
+  "required_paths": [
+    "SKILL.md",
+    "assets/template.html",
+    "assets/template-swiss.html",
+    "scripts/validate-swiss-deck.mjs"
+  ],
+  "license": {
+    "notice": "Follow upstream guizang-ppt-skill license and attribution requirements."
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "$schema": "https://operator.local/schemas/operator-capability.v1.json",
+  "apiVersion": "operator.dev/v1",
+  "kind": "workflow",
+  "id": "system.skill2workflow",
+  "displayName": "Skill to Workflow",
+  "description": "System workflow that converts an accepted skill into a deterministic Mastra workflow candidate.",
+  "source": {
+    "type": "bundled",
+    "provider": "local",
+    "root": "apps/mastra/src/workflows/system/skill2workflow"
+  },
+  "adapter": {
+    "type": "mastra-workflow",
+    "entrypoints": {
+      "workflow": "workflow.ts",
+      "tools": "tools.ts",
+      "validation": "validation.ts"
+    }
+  },
+  "configuration": {
+    "requiredEnv": [],
+    "optionalEnv": [
+      "OPERATOR_SKILL2WORKFLOW_CODEX_TIMEOUT_MS",
+      "OPERATOR_SKILL2WORKFLOW_ORIGINAL_TEST_TIMEOUT_MS"
+    ],
+    "providers": []
+  },
+  "validation": {
+    "requiredPaths": [
+      "workflow.ts",
+      "tools.ts",
+      "validation.ts"
+    ],
+    "capabilityTests": [
+      {
+        "name": "workflow-entrypoints-present",
+        "type": "golden-example",
+        "source": "operator-golden-example",
+        "command": "test -s {capability_root}/workflow.ts && test -s {capability_root}/tools.ts && test -s {capability_root}/validation.ts",
+        "required": true,
+        "timeoutMs": 10000
+      }
+    ]
+  },
+  "exposure": {
+    "scopes": [
+      {
+        "id": "system.skill2workflow",
+        "surface": "admin",
+        "enabledByDefault": false
+      }
+    ]
+  }
+}

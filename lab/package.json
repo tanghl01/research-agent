@@ -1,0 +1,17 @@
+{
+  "name": "operator-agent-runtime-lab",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Operator agent runtime and web/search tooling evaluation lab.",
+  "scripts": {
+    "metadata": "node scripts/collect-metadata.mjs",
+    "mcp": "node scripts/discover-mcp-tools.mjs",
+    "components": "node scripts/component-smoke.mjs",
+    "runtime": "node scripts/runtime-smoke.mjs",
+    "all": "node scripts/collect-metadata.mjs && node scripts/discover-mcp-tools.mjs && node scripts/component-smoke.mjs && node scripts/runtime-smoke.mjs"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.24.0"
+  }
+}

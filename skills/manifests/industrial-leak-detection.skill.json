@@ -1,0 +1,26 @@
+{
+  "$schema": "https://operator.local/schemas/skill-manifest.v1.json",
+  "id": "industrial-leak-detection",
+  "kind": "agent_skill",
+  "display_name": "Industrial Leak Detection",
+  "description": "Analyze industrial inspection images for water leaks, oil leaks, water stains, spray mist, and gas-leak visual proxies.",
+  "cache": {
+    "development_root": "skills/local/industrial-leak-detection"
+  },
+  "entrypoints": {
+    "skill": "SKILL.md"
+  },
+  "required_paths": [
+    "SKILL.md"
+  ],
+  "execution": {
+    "evidence_entrypoint": "skill",
+    "required_entrypoints": [
+      "skill"
+    ],
+    "notes": [
+      "Inspect uploaded image attachments directly from the task workspace.",
+      "Return structured JSON evidence and a human-readable Markdown review."
+    ]
+  }
+}

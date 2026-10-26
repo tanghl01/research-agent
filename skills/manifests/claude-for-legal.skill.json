@@ -1,0 +1,36 @@
+{
+  "$schema": "https://operator.local/schemas/skill-manifest.v1.json",
+  "id": "claude-for-legal",
+  "kind": "agent_skill_collection",
+  "display_name": "claude-for-legal",
+  "description": "Anthropic legal workflow and skill collection for commercial, corporate, privacy, regulatory, litigation, and legal clinic tasks.",
+  "source": {
+    "type": "git",
+    "repo": "https://github.com/anthropics/claude-for-legal.git",
+    "ref": "main",
+    "commit": "248331e0fedd76418edd8b46ca895518f9a009ce"
+  },
+  "cache": {
+    "development_root": "skills/vendored/claude-for-legal",
+    "production_root_env": "OPERATOR_SKILL_CACHE_ROOT",
+    "production_path_template": "{root}/{id}/{commit}"
+  },
+  "env": {
+    "root_override": "OPERATOR_CLAUDE_FOR_LEGAL_ROOT"
+  },
+  "entrypoints": {
+    "readme": "README.md",
+    "commercial_legal": "commercial-legal/skills",
+    "ai_governance_legal": "ai-governance-legal/skills",
+    "privacy_legal": "privacy-legal/skills"
+  },
+  "required_paths": [
+    "README.md",
+    "commercial-legal/skills/nda-review/SKILL.md",
+    "ai-governance-legal/skills/ai-inventory/SKILL.md",
+    "privacy-legal/skills/pia-generation/SKILL.md"
+  ],
+  "license": {
+    "notice": "Follow upstream claude-for-legal license; outputs require qualified legal review."
+  }
+}

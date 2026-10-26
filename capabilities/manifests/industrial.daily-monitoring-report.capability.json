@@ -1,0 +1,58 @@
+{
+  "$schema": "https://operator.local/schemas/operator-capability.v1.json",
+  "apiVersion": "operator.dev/v1",
+  "kind": "workflow",
+  "id": "industrial.daily-monitoring-report",
+  "displayName": "Industrial Daily Monitoring Report",
+  "description": "Bundled Mastra workflow that compiles accepted industrial leak findings and meter readings into a daily report artifact.",
+  "source": {
+    "type": "bundled",
+    "provider": "local",
+    "root": "apps/mastra/src/workflows/industrial/daily-report"
+  },
+  "adapter": {
+    "type": "mastra-workflow",
+    "entrypoints": {
+      "workflow": "workflow.ts",
+      "schemas": "schemas.ts",
+      "tools": "tools.ts"
+    }
+  },
+  "configuration": {
+    "requiredEnv": [],
+    "optionalEnv": [],
+    "providers": []
+  },
+  "validation": {
+    "requiredPaths": [
+      "workflow.ts",
+      "schemas.ts",
+      "tools.ts"
+    ],
+    "capabilityTests": [
+      {
+        "name": "workflow-contract-entrypoints-present",
+        "type": "golden-example",
+        "source": "operator-golden-example",
+        "command": "test -s {capability_root}/workflow.ts && test -s {capability_root}/schemas.ts && test -s {capability_root}/tools.ts",
+        "required": true,
+        "timeoutMs": 10000
+      }
+    ]
+  },
+  "exposure": {
+    "scopes": [
+      {
+        "id": "industrial.daily-monitoring-report",
+        "surface": "chat",
+        "enabledByDefault": true
+      }
+    ],
+    "artifacts": [
+      {
+        "type": "industrial_report",
+        "formats": ["pdf", "tex", "json"]
+      }
+    ]
+  }
+}

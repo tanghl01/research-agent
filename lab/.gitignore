@@ -1,0 +1,6 @@
+node_modules/
+runs/
+vendor/
+.playwright-mcp/
+*.log
+package-lock.json
